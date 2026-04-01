@@ -71,7 +71,6 @@ EXTRA_OECMAKE += " \
                   -DFETCHCONTENT_BASE_DIR="${S}" \
                   -DENABLE_INTEL_NPU=OFF \
                   -DPYTHON3_CONFIG="python3-config" \
-                  -DENABLE_OV_JAX_FRONTEND=OFF \
                   -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
                   -DENABLE_SYSTEM_ZLIB=ON \
                   "
@@ -109,6 +108,7 @@ PACKAGECONFIG[samples] = "-DENABLE_SAMPLES=ON -DENABLE_COMPILE_TOOL=ON, -DENABLE
 PACKAGECONFIG[verbose] = "-DVERBOSE_BUILD=1,-DVERBOSE_BUILD=0"
 # Frontends
 PACKAGECONFIG[onnx] = "-DENABLE_OV_ONNX_FRONTEND=ON, -DENABLE_OV_ONNX_FRONTEND=OFF,,"
+PACKAGECONFIG[jax] = "-DENABLE_OV_JAX_FRONTEND=ON, -DENABLE_OV_JAX_FRONTEND=OFF,,"
 
 do_configure:prepend() {
     # Dont set PROJECT_ROOT_DIR
