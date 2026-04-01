@@ -76,16 +76,12 @@ EXTRA_OECMAKE += " \
 EXTRA_OECMAKE:append:aarch64 = " -DARM_COMPUTE_LIB_DIR=${STAGING_LIBDIR} "
 
 DEPENDS += "\
-            flatbuffers-native \
             nlohmann-json \
             gflags \
-            protobuf \
-            protobuf-native \
             pugixml \
             python3-pybind11 \
             python3-scons-native \
             qemu-native \
-            snappy \
             zlib \
             "
 DEPENDS:append:aarch64 = " arm-compute-library"
@@ -94,7 +90,7 @@ DEPENDS:append:aarch64 = " arm-compute-library"
 #COMPATIBLE_HOST = '(x86_64).*-linux'
 COMPATIBLE_HOST:libc-musl = "null"
 
-PACKAGECONFIG ?= "tbb samples"
+PACKAGECONFIG ?= "tbb tf tflite paddle pytorch samples"
 # Threading models (mutually exclusive — enable only one)
 PACKAGECONFIG[tbb] = "-DTHREADING=TBB -DENABLE_SYSTEM_TBB=ON -DTBB_DIR='${STAGING_LIBDIR}/cmake/TBB' -DENABLE_TBBBIND_2_5=OFF, , tbb,"
 PACKAGECONFIG[omp] = "-DTHREADING=OMP, , ,"
@@ -109,6 +105,10 @@ PACKAGECONFIG[verbose] = "-DVERBOSE_BUILD=1,-DVERBOSE_BUILD=0"
 PACKAGECONFIG[onnx] = "-DENABLE_OV_ONNX_FRONTEND=ON, -DENABLE_OV_ONNX_FRONTEND=OFF,,"
 PACKAGECONFIG[jax] = "-DENABLE_OV_JAX_FRONTEND=ON, -DENABLE_OV_JAX_FRONTEND=OFF,,"
 PACKAGECONFIG[npu] = "-DENABLE_INTEL_NPU=ON, -DENABLE_INTEL_NPU=OFF,,"
+PACKAGECONFIG[tf] = "-DENABLE_OV_TF_FRONTEND=ON, -DENABLE_OV_TF_FRONTEND=OFF, protobuf protobuf-native snappy,"
+PACKAGECONFIG[tflite] = "-DENABLE_OV_TF_LITE_FRONTEND=ON, -DENABLE_OV_TF_LITE_FRONTEND=OFF, flatbuffers-native,"
+PACKAGECONFIG[paddle] = "-DENABLE_OV_PADDLE_FRONTEND=ON, -DENABLE_OV_PADDLE_FRONTEND=OFF, protobuf protobuf-native,"
+PACKAGECONFIG[pytorch] = "-DENABLE_OV_PYTORCH_FRONTEND=ON, -DENABLE_OV_PYTORCH_FRONTEND=OFF,,"
 
 do_configure:prepend() {
     # Dont set PROJECT_ROOT_DIR
