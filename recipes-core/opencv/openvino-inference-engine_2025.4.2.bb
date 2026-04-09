@@ -61,13 +61,11 @@ DEPENDS += "\
             nlohmann-json \
             gflags \
             pugixml \
-            python3-pybind11 \
-            python3-scons-native \
             qemu-native \
             xbyak \
             zlib \
             "
-DEPENDS:append:aarch64 = " arm-compute-library"
+DEPENDS:append:aarch64 = " arm-compute-library python3-scons-native"
 
 
 #COMPATIBLE_HOST = '(x86_64).*-linux'
@@ -80,7 +78,7 @@ PACKAGECONFIG[omp] = "-DTHREADING=OMP, , ,"
 PACKAGECONFIG[seq] = "-DTHREADING=SEQ, , ,"
 PACKAGECONFIG[itt] = "-DENABLE_PROFILING_ITT=BASE, -DENABLE_PROFILING_ITT=OFF, itt,"
 PACKAGECONFIG[opencl] = "-DENABLE_INTEL_GPU=TRUE, -DENABLE_INTEL_GPU=FALSE, virtual/libopencl1 opencl-headers opencl-clhpp,"
-PACKAGECONFIG[python3] = "-DENABLE_PYTHON=ON -DENABLE_PYTHON_PACKAGING=ON, -DENABLE_PYTHON=OFF, patchelf-native, python3 python3-numpy python3-progress"
+PACKAGECONFIG[python3] = "-DENABLE_PYTHON=ON -DENABLE_PYTHON_PACKAGING=ON, -DENABLE_PYTHON=OFF, patchelf-native python3-pybind11 python3-setuptools-native, python3 python3-numpy python3-progress"
 PACKAGECONFIG[node] = "-DENABLE_JS=ON -DENABLE_SYSTEM_NODE=ON,-DENABLE_JS=OFF, nodejs"
 PACKAGECONFIG[samples] = "-DENABLE_SAMPLES=ON -DENABLE_COMPILE_TOOL=ON, -DENABLE_SAMPLES=OFF -DENABLE_COMPILE_TOOL=OFF, opencv"
 PACKAGECONFIG[verbose] = "-DVERBOSE_BUILD=1,-DVERBOSE_BUILD=0"
@@ -187,7 +185,9 @@ RDEPENDS:${PN}-samples += "python3-core"
 # Package for inference engine python API
 PACKAGES =+ "${@bb.utils.contains('PACKAGECONFIG', 'python3', '${PN}-python3', '', d)}"
 
-FILES:${PN}-python3 = "${PYTHON_SITEPACKAGES_DIR}"
+FILES:${PN}-python3 = "${PYTHON_SITEPACKAGES_DIR} ${bindir}/ovc ${bindir}/opt_in_out ${bindir}/benchmark_app"
+
+RDEPENDS:${PN}-python3 += "python3-core"
 
 # Package for Node.js bindings
 PACKAGES =+ "${@bb.utils.contains('PACKAGECONFIG', 'node', '${PN}-node', '', d)}"
