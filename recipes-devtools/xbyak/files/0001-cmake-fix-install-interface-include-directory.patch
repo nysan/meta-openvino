@@ -1,0 +1,31 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?David=20Nystr=C3=B6m?= <david.c.nystrom@gmail.com>
+Date: Thu, 09 Apr 2026 12:00:00 +0000
+Subject: [PATCH] cmake: fix install interface include directory
+
+Upstream-Status: Pending
+
+The INSTALL_INTERFACE was set to CMAKE_INSTALL_INCLUDEDIR (/usr/include)
+but headers are installed to /usr/include/xbyak. This caused consumers
+to get -isystem /usr/include which breaks GCC's #include_next for
+standard library headers.
+
+Remove the INSTALL_INTERFACE entirely since the installed CMake config
+already sets INTERFACE_INCLUDE_DIRECTORIES correctly via the export.
+
+Signed-off-by: David Nyström <david.c.nystrom@gmail.com>
+---
+ CMakeLists.txt | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -9,7 +9,6 @@ add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
+ target_include_directories(
+ 	${PROJECT_NAME} INTERFACE
+ 	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>"
+-	"$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>"
+ )
+ 
+ install(

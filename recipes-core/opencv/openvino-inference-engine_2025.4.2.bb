@@ -7,7 +7,6 @@ integrated with application logic."
 SRC_URI = "git://github.com/openvinotoolkit/openvino.git;protocol=https;name=openvino;branch=releases/2025/4;lfs=0 \
            git://github.com/openvinotoolkit/oneDNN.git;protocol=https;destsuffix=${BB_GIT_DEFAULT_DESTSUFFIX}/src/plugins/intel_cpu/thirdparty/onednn;name=mkl;nobranch=1 \
            git://github.com/oneapi-src/oneDNN.git;protocol=https;destsuffix=${BB_GIT_DEFAULT_DESTSUFFIX}/src/plugins/intel_gpu/thirdparty/onednn_gpu;name=onednn;nobranch=1 \
-           git://github.com/herumi/xbyak.git;protocol=https;destsuffix=${BB_GIT_DEFAULT_DESTSUFFIX}/thirdparty/xbyak;name=xbyak;branch=master \
            git://github.com/openvinotoolkit/mlas.git;protocol=https;destsuffix=${BB_GIT_DEFAULT_DESTSUFFIX}/src/plugins/intel_cpu/thirdparty/mlas;name=mlas;nobranch=1 \
            file://0001-cmake-yocto-specific-tweaks-to-the-build-process.patch \
            file://0002-cmake-Fix-overloaded-virtual-error.patch \
@@ -23,13 +22,11 @@ SRC_URI = "git://github.com/openvinotoolkit/openvino.git;protocol=https;name=ope
 SRCREV_openvino = "85e49f27be1b1647a7ec331069b053596d1112f8"
 SRCREV_mkl = "a4ed4a789b6e0869e4f651bbfeff6878e91d388e"
 SRCREV_onednn = "29d64fe0ec0f1f20d7f80aa76630d58a6011a869"
-SRCREV_xbyak = "0d67fd1530016b7c56f3cd74b3fca920f4c3e2b4"
 SRCREV_mlas = "d1bc25ec4660cddd87804fcf03b2411b5dfb2e94"
-SRCREV_FORMAT = "openvino_mkl_onednn_xbyak_ade_mlas"
+SRCREV_FORMAT = "openvino_mkl_onednn_ade_mlas"
 
 LICENSE = "Apache-2.0 & MIT & BSD-3-Clause"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=86d3f3a95c324c9479bd8986968f4327 \
-                    file://thirdparty/xbyak/COPYRIGHT;md5=3c98edfaa50a86eeaef4c6109e803f16 \
                     file://thirdparty/cnpy/LICENSE;md5=689f10b06d1ca2d4b1057e67b16cd580 \
                     file://src/plugins/intel_cpu/thirdparty/mlas/LICENSE;md5=86d3f3a95c324c9479bd8986968f4327 \
                     file://src/plugins/intel_cpu/thirdparty/onednn/LICENSE;md5=3b64000f6e7d52516017622a37a94ce9 \
@@ -70,6 +67,7 @@ DEPENDS += "\
             python3-pybind11 \
             python3-scons-native \
             qemu-native \
+            xbyak \
             zlib \
             "
 DEPENDS:append:aarch64 = " arm-compute-library"
