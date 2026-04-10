@@ -74,7 +74,7 @@ COMPATIBLE_HOST:libc-musl = "null"
 PACKAGECONFIG ?= "tbb tf tflite paddle pytorch samples"
 # Threading models (mutually exclusive — enable only one)
 PACKAGECONFIG[tbb] = "-DTHREADING=TBB -DENABLE_SYSTEM_TBB=ON -DTBB_DIR='${STAGING_LIBDIR}/cmake/TBB' -DENABLE_TBBBIND_2_5=OFF, , tbb,"
-PACKAGECONFIG[omp] = "-DTHREADING=OMP, , ,"
+PACKAGECONFIG[omp] = "-DTHREADING=OMP -DENABLE_INTEL_OPENMP=OFF, , ,"
 PACKAGECONFIG[seq] = "-DTHREADING=SEQ, , ,"
 PACKAGECONFIG[itt] = "-DENABLE_PROFILING_ITT=BASE, -DENABLE_PROFILING_ITT=OFF, itt,"
 PACKAGECONFIG[opencl] = "-DENABLE_INTEL_GPU=TRUE, -DENABLE_INTEL_GPU=FALSE, virtual/libopencl1 opencl-headers opencl-clhpp,"
@@ -109,6 +109,15 @@ SRCREV_onednn = "29d64fe0ec0f1f20d7f80aa76630d58a6011a869"
 SRCREV_FORMAT .= "${@bb.utils.contains('PACKAGECONFIG', 'opencl', '_onednn', '', d)}"
 LIC_FILES_CHKSUM += "${@bb.utils.contains('PACKAGECONFIG', 'opencl', \
     'file://src/plugins/intel_gpu/thirdparty/onednn_gpu/LICENSE;md5=05fda7e0b3a0fe6749e8443316fc9a3f', \
+    '', d)}"
+
+SRC_URI += "${@bb.utils.contains('PACKAGECONFIG', 'onnx', \
+    'git://github.com/onnx/onnx.git;protocol=https;destsuffix=${BB_GIT_DEFAULT_DESTSUFFIX}/thirdparty/onnx/onnx;name=onnx;nobranch=1', \
+    '', d)}"
+SRCREV_onnx = "b8baa8446686496da4cc8fda09f2b6fe65c2a02c"
+SRCREV_FORMAT .= "${@bb.utils.contains('PACKAGECONFIG', 'onnx', '_onnx', '', d)}"
+LIC_FILES_CHKSUM += "${@bb.utils.contains('PACKAGECONFIG', 'onnx', \
+    'file://thirdparty/onnx/onnx/LICENSE;md5=3b83ef96387f14655fc854ddc3c6bd57', \
     '', d)}"
 
 SRC_URI += "${@bb.utils.contains('PACKAGECONFIG', 'node', \
