@@ -167,6 +167,7 @@ do_install:append() {
     if [ -f ${S}/bin/intel64/ov_node_addon.node ]; then
         install -d ${D}${libdir}
         install -m 0755 ${S}/bin/intel64/ov_node_addon.node ${D}${libdir}/ov_node_addon.node
+        chrpath -d ${D}${libdir}/ov_node_addon.node
     fi
 }
 
@@ -204,5 +205,8 @@ PACKAGES =+ "${@bb.utils.contains('PACKAGECONFIG', 'node', '${PN}-node', '', d)}
 FILES:${PN}-node = "${libdir}/ov_node_addon.node"
 
 RDEPENDS:${PN}-node += "nodejs ${PN}"
+
+# Node addon is built outside CMake's install, buildpath in debug strings
+INSANE_SKIP:${PN}-node += "buildpaths"
 
 UPSTREAM_CHECK_GITTAGREGEX = "(?P<pver>(\d+\.\d+\.\d+))$"
